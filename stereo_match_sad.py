@@ -1,5 +1,6 @@
 import numpy as np 
 import cv2 
+import tqdm
 
 def stereo_match(img_left, img_right, window_size, max_disparity):
     # Convert images to grayscale
@@ -14,8 +15,8 @@ def stereo_match(img_left, img_right, window_size, max_disparity):
     half_window = int(window_size / 2)
 
     # Loop over image pixels
-    for y in range(half_window, height - half_window):
-        print('\rProcessing.. %d%% complete' %(y/(height-half_window)*100), end="", flush=True)
+    for y in tqdm.tqdm(range(half_window, height - half_window)):
+        # print('\rProcessing.. %d%% complete' %(y/(height-half_window)*100), end="", flush=True)
         for x in range(half_window, width - half_window):
             # Define search window in right image
             search_window = img_right_gray[y - half_window:y + half_window + 1,
@@ -36,6 +37,7 @@ def stereo_match(img_left, img_right, window_size, max_disparity):
                                                   x - d - half_window:x - d + half_window + 1]
 
                 # Calculate sum of absolute differences between template and candidate windows
+                template_window = np.resize(template_window, candidate_window.shape)
                 sad = np.sum(np.abs(template_window - candidate_window))
 
                 # Update best match and minimum difference if necessary
@@ -47,8 +49,3 @@ def stereo_match(img_left, img_right, window_size, max_disparity):
             disp_map[y, x] = best_match
 
     return disp_map
-
-img_left = cv2.imread('images/view1.png')
-img_right = cv2.imread('images/view5.png')
-map = stereo_match(img_left, img_right, 3, 50)
-cv2.imwrite('result.png', map)
