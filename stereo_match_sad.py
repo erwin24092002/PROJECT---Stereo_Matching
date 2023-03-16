@@ -30,6 +30,9 @@ def stereo_match(img_left, img_right, window_size, max_disparity):
                     min_diff = sad
                     best_match = d
 
-            disp_map[y, x] = best_match
+                if x + d + half_window + 1 >= width:
+                    break
+
+            disp_map[y, x] = best_match / max_disparity * 255
 
     return disp_map
