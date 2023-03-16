@@ -55,7 +55,7 @@ def stereo_match_census(img_left, img_right, window_size, max_disparity):
 
             for d in range(max_disparity):
                 right_window = right_census[y - half_window:y + half_window + 1,
-                                                  x + d - half_window:x + d + half_window + 1]
+                                                  x - d - half_window:x - d + half_window + 1]
 
                 hamming_distance = np.sum(np.abs(left_window-right_window))
 
@@ -63,7 +63,7 @@ def stereo_match_census(img_left, img_right, window_size, max_disparity):
                     min_diff = hamming_distance
                     best_match = d
 
-                if x + d + half_window + 1 >= width:
+                if x - d - half_window <= 0:
                     break
 
             disp_map[y, x] = best_match / max_disparity * 255

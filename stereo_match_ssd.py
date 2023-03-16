@@ -11,7 +11,7 @@ def stereo_match_ssd(img_left, img_right, window_size, max_disparity):
 
     half_window = int(window_size / 2)
 
-    for y in tqdm.tqdm(range(half_window, height - half_window)):
+    for y in tqdm.tqdm(range(half_window, height - half_window), desc="stereo matching"):
         # print('\rProcessing.. %d%% complete' %(y/(height-half_window)*100), end="", flush=True)
         for x in range(half_window, width - half_window):
             left_window = img_left_gray[y - half_window:y + half_window + 1,
@@ -22,7 +22,7 @@ def stereo_match_ssd(img_left, img_right, window_size, max_disparity):
 
             for d in range(max_disparity):
                 right_window = img_right_gray[y - half_window:y + half_window + 1,
-                                                  x + d - half_window:x + d + half_window + 1]
+                                                  x - d - half_window:x - d + half_window + 1]
 
                 sad = np.sum(np.square(left_window - right_window))
 
@@ -30,7 +30,7 @@ def stereo_match_ssd(img_left, img_right, window_size, max_disparity):
                     min_diff = sad
                     best_match = d
 
-                if x + d + half_window + 1 >= width:
+                if x - d - half_window <= 0:
                     break
 
             disp_map[y, x] = best_match / max_disparity * 255
