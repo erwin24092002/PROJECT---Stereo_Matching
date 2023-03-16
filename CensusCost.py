@@ -121,7 +121,7 @@ def stereo_match(left_census, right_census, kernel, max_offset):
     Image.fromarray(depth).save('hamming_disparity.png')
 
 if __name__ == '__main__':
-    left_census, right_census = computeCensus("view1_d.png", "view5_d.png", 3)
+    left_census, right_census = computeCensus("images/view1.png", "images/view5.png", 3)
     visualizeCensus(left_census, 3, "left_census.png")
     visualizeCensus(right_census, 3, "right_census.png")
     stereo_match(left_census,right_census,5, 32)
