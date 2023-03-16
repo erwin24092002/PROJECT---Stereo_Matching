@@ -1,12 +1,13 @@
 import cv2
 import numpy as np
 import argparse
-from stereo_match_sad import stereo_match
+from stereo_match_sad import stereo_match_sad
+from stereo_match_ssd import stereo_match_ssd
 
 def execute_stereo_matching(img_left_path, img_right_path, window_size, max_disparity, disparity_map_path):
     img_left = cv2.imread(img_left_path)
     img_right = cv2.imread(img_right_path)
-    disparity_map = stereo_match(img_left, img_right, window_size, max_disparity)
+    disparity_map = stereo_match_ssd(img_left, img_right, window_size, max_disparity)
     cv2.imwrite(disparity_map_path, disparity_map)
     return 
 

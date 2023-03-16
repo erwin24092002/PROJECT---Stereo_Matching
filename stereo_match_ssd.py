@@ -2,7 +2,7 @@ import numpy as np
 import cv2 
 import tqdm
 
-def stereo_match_sad(img_left, img_right, window_size, max_disparity):
+def stereo_match_ssd(img_left, img_right, window_size, max_disparity):
     img_left_gray = cv2.cvtColor(img_left, cv2.COLOR_BGR2GRAY)
     img_right_gray = cv2.cvtColor(img_right, cv2.COLOR_BGR2GRAY)
 
@@ -24,7 +24,7 @@ def stereo_match_sad(img_left, img_right, window_size, max_disparity):
                 right_window = img_right_gray[y - half_window:y + half_window + 1,
                                                   x + d - half_window:x + d + half_window + 1]
 
-                sad = np.sum(np.abs(left_window - right_window))
+                sad = np.sum(np.square(left_window - right_window))
 
                 if sad < min_diff:
                     min_diff = sad
